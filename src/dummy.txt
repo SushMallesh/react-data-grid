@@ -4,10 +4,23 @@ import * as XLSX from 'xlsx'
  
 import './App.css'
 
+
+let arr = []
+let array = []
+
 let indexArr  = Array(4).fill(0).map(row=>new Array(7).fill(0))
 export default function App() {
 
   const [items,setItems] = useState([])
+  const [resValue, setResValue] = useState([])
+  const [res,setRes] = useState({
+    ID:'',
+    Question:'',
+    Response_Values:'',
+    Supporting_Evidence:''
+  })
+
+  const [newArr,setArr] = useState([...indexArr])
 
   const handleFile =async(e)=>{
    
@@ -26,10 +39,17 @@ export default function App() {
       defval:'',
      
     })
+    //  arr = (arrData.slice(1,)).map(item=>{
+    //   return{
+    //     ID:item[0],
+    //     Question:item[1],
+    //     Response_Values:'',
+    //     Supporting_Evidence:''
+    // }} )
   
     for(let i=0;i<arrData.length;i++){
       for (let j=0;j<(arrData[i].length);j++){
-        if([0,1,3,4,6,7].includes(j)){
+        if([0,1].includes(j)){
           indexArr[i][j] = arrData[i][j]
         }else{
           indexArr[i][j] = ''
@@ -41,6 +61,7 @@ export default function App() {
 
   }
 
+
   const EditableCell = ({
     row:{id},
     column:{columnId},
@@ -50,7 +71,14 @@ export default function App() {
 
     const onChange = (e) =>{
     indexArr[parseInt(id)+1][parseInt(columnId)] = e.target.value
-
+    // console.log(indexArr)
+      // setRes({
+      //   ID:arr[id].ID,
+      //   Question:arr[id].Question,
+      //   Response_Values:e.target.value,
+      //   Supporting_Evidence:arr[id].Supporting_Evidence
+      // })
+         
     }
    
     return <select onChange={onChange} defaultValue={value[0]}>
@@ -67,15 +95,11 @@ export default function App() {
     const onChange = (e) =>{
 
     indexArr[parseInt(id)+1][parseInt(columnId)] = e.target.files[0]
+    // console.log(indexArr)
+      // setRes(prev=>({...prev,Supporting_Evidence:e.target.files[0]}))
     }
     return <input type="file" name="upload file" onChange={onChange}/>
   }
-
-  const onClickSubmit = () =>{
-    console.log(JSON.stringify(indexArr))
-  }
-
-  console.log(indexArr)
 
   const COLUMNS =[
 
@@ -96,18 +120,8 @@ export default function App() {
       Cell:EditableCell
     },
     {
-      Header:'NIST_ID',
-      columnId:3,
-      accessor:'NIST_ID',
-    },
-    {
-      Header:'IEC_ID',
-      columnId:4,
-      accessor:'IEC_ID',
-    },
-    {
       Header:'Supporting Evidence',
-      columnId:5,
+      columnId:3,
       accessor:'Supporting_Evidence',
       Cell:EditableEvidenceCell
     }
@@ -118,6 +132,7 @@ export default function App() {
         return items
     },[items])
 
+    console.log(newArr)
     const columns = useMemo(() => {
           return COLUMNS
       },[])
@@ -165,6 +180,8 @@ export default function App() {
                    
           </tr>)})}
             </tbody>
-          </table>
-          <button onClick={onClickSubmit}>Submit</button>
-        </div>}
+        </table>
+
+        </div>
+          
+}

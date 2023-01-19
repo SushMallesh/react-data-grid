@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+table{
+  border:1px solid #f0f0f0;
+  padding:20px;
+
+}
+
+th{
+  border-bottom:1px solid #ffffff;
+  padding:20px;
+}
+
+
+td{
+  text-align: center;
+  background-color:aliceblue;
+  color:rgb(41, 28, 114);
+  padding:20px;
+}
