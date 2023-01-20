@@ -1,13 +1,16 @@
+
 import React,{useState,useMemo} from "react";
 import { useTable } from "react-table";
 import * as XLSX from 'xlsx'
  
 import './App.css'
 
+
 let indexArr  = Array(4).fill(0).map(row=>new Array(7).fill(0))
 export default function App() {
 
   const [items,setItems] = useState([])
+  const [newArr,setArr] = useState([...indexArr])
 
   const handleFile =async(e)=>{
    
@@ -51,9 +54,16 @@ export default function App() {
     const onChange = (e) =>{
     indexArr[parseInt(id)+1][parseInt(columnId)] = e.target.value
 
+    if(e.target.value === "No"){
+      setArr(indexArr => [...indexArr.map(item=>{
+        if(item[0] === indexArr[parseInt(id)+1][6]){
+          return item[6] = true
+        }
+      })])
     }
-   
-    return <select onChange={onChange} defaultValue={value[0]}>
+    }
+
+    return <select disabled ={newArr[parseInt(id)+1][6] === true?true:false} onChange={onChange} defaultValue={value[0]}>
           {value.split(",").map(re =>
             <option value={re} key={re}>{re}</option>)}
        </select>
@@ -68,15 +78,13 @@ export default function App() {
 
     indexArr[parseInt(id)+1][parseInt(columnId)] = e.target.files[0]
     }
-    return <input type="file" name="upload file" onChange={onChange}/>
+    return <input disabled ={newArr[parseInt(id)+1][6] === true?true:false} type="file" name="upload file" onChange={onChange}/>
   }
 
   const onClickSubmit = () =>{
-    console.log(JSON.stringify(indexArr))
+    
+    return JSON.stringify(indexArr)
   }
-
-  console.log(indexArr)
-
   const COLUMNS =[
 
     {
